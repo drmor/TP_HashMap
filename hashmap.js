@@ -54,6 +54,110 @@ class HashMap {
       return;
     }
   }
+  get(key) {
+    const index = this.hash(key);
+    const bucket = this.buckets[index];
+    if (!bucket) return false;
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i].key === key) {
+        return bucket[i].value;
+      }
+    }
+    return false;
+  }
+  has(key) {
+    const index = this.hash(key);
+    const bucket = this.buckets[index];
+    if (!bucket) return false;
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i].key === key) {
+        return true;
+      }
+    }
+    return false;
+  }
+  remove(key) {
+    const index = this.hash(key);
+    let bucket = this.buckets[index];
+    if (!bucket) return false;
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i].key === key) {
+        bucket.splice(i, 1);
+        this.size--;
+        if (bucket.length == 0) {
+          this.buckets[index] = null;
+        }
+        return true;
+      }
+    }
+  }
+  length() {
+    return this.size;
+  }
+  clear() {
+    this.buckets.fill(null);
+    this.size = 0;
+  }
+  keys() {
+    let keysArr = [];
+    for (let i = 0; i < this.buckets.length; i++) {
+      if (this.buckets[i]) {
+        keysArr.push(this.buckets[i].key);
+        if (this.buckets[i].length !== 1) {
+          for (let j = 0; j < this.buckets[i].length; j++) {
+            keysArr.push(this.buckets[i][j].key);
+          }
+        }
+      }
+    }
+    return keysArr;
+  }
+  keys() {
+    let keysArr = [];
+    for (let i = 0; i < this.buckets.length; i++) {
+      if (this.buckets[i]) {
+        keysArr.push(this.buckets[i][0].key);
+        if (this.buckets[i].length !== 1) {
+          for (let j = 1; j < this.buckets[i].length; j++) {
+            keysArr.push(this.buckets[i][j].key);
+          }
+        }
+      }
+    }
+    return keysArr;
+  }
+  values() {
+    let valuesArr = [];
+    for (let i = 0; i < this.buckets.length; i++) {
+      if (this.buckets[i]) {
+        valuesArr.push(this.buckets[i][0].value);
+        if (this.buckets[i].length !== 1) {
+          for (let j = 1; j < this.buckets[i].length; j++) {
+            valuesArr.push(this.buckets[i][j].value);
+          }
+        }
+      }
+    }
+    return valuesArr;
+  }
+  entries() {
+    let entriesArr = [];
+    for (let i = 0; i < this.buckets.length; i++) {
+      if (this.buckets[i]) {
+        entriesArr.push(
+          Array(this.buckets[i][0].key, this.buckets[i][0].value),
+        );
+        if (this.buckets[i].length !== 1) {
+          for (let j = 1; j < this.buckets[i].length; j++) {
+            entriesArr.push(
+              Array(this.buckets[i][j].key, this.buckets[i][j].value),
+            );
+          }
+        }
+      }
+    }
+    return entriesArr;
+  }
 }
 
 const test = new HashMap();
